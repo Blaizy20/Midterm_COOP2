@@ -1,0 +1,19 @@
+<?php
+echo "MYSQLHOST: " . getenv('MYSQLHOST') . "<br>";
+echo "MYSQLPORT: " . getenv('MYSQLPORT') . "<br>";
+echo "MYSQLUSER: " . getenv('MYSQLUSER') . "<br>";
+echo "MYSQLDATABASE: " . getenv('MYSQLDATABASE') . "<br>";
+
+$host = getenv('MYSQLHOST') ?: 'localhost';
+$port = (int)(getenv('MYSQLPORT') ?: 3306);
+$user = getenv('MYSQLUSER') ?: 'root';
+$pass = getenv('MYSQLPASSWORD') ?: '';
+$db   = getenv('MYSQLDATABASE') ?: 'railway';
+
+$conn = @new mysqli($host, $user, $pass, $db, $port);
+if ($conn->connect_error) {
+    echo "Connection FAILED: " . $conn->connect_error;
+} else {
+    echo "Connection SUCCESSFUL!";
+}
+?>
