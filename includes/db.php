@@ -6,18 +6,25 @@ $DB_PASS = getenv('MYSQLPASSWORD') ?: '';
 $DB_NAME = getenv('MYSQLDATABASE') ?: 'loan_management';
 $DB_PORT = (int)(getenv('MYSQLPORT') ?: 3306);
 
+// DEBUG: show what values are being used (remove after fixing)
+error_log("DB DEBUG => Host: $DB_HOST | Port: $DB_PORT | User: $DB_USER | DB: $DB_NAME");
+
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-/**
- * Return a singleton mysqli connection (with DB selected).
- */
 function db() {
   global $DB_HOST, $DB_USER, $DB_PASS, $DB_NAME, $DB_PORT;
   static $conn = null;
 
   if ($conn === null) {
-    $conn = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME, $DB_PORT);
-    $conn->set_charset('utf8mb4');
+    try {
+      $conn = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME, $DB_PORT);
+      $conn->set_charset('utf8mb4');
+    } catch (Exception $e) {
+      $msg  = "DB Connection failed: " . $e->getMessage();
+      $msg .= " | Host: $DB_HOST | Port: $DB_PORT | User: $DB_USER | DB: $DB_NAME";
+      error_log($msg);
+      die("<pre>$msg</pre>");
+    }
   }
   return $conn;
 }
@@ -32,10 +39,6 @@ function _bind_params($stmt, $types, $params) {
   call_user_func_array([$stmt, 'bind_param'], $bind);
 }
 
-/**
- * Prepared statement helper.
- * Example: q("SELECT * FROM users WHERE user_id = ?", "i", [$id]);
- */
 function q($sql, $types = '', $params = []) {
   $conn = db();
   $stmt = $conn->prepare($sql);
