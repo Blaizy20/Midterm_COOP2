@@ -1,5 +1,8 @@
 {
     "require": {
-        "phpmailer/phpmailer": "*"
+        "phpmailer/phpmailer": "*",
+        "ext-mysqli": "*",
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*"
     }
 }
