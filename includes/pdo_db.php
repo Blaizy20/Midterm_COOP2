@@ -17,13 +17,18 @@ class Database {
     private static $instance = null;
     private $pdo = null;
     
-    private $db_host = 'localhost';
-    private $db_user = 'root';
-    private $db_pass = '';
-    private $db_name = 'loan_management';
-    private $db_port = 3306;
-    
+    private $db_host;
+    private $db_user;
+    private $db_pass;
+    private $db_name;
+    private $db_port;
+
     private function __construct() {
+        $this->db_host = getenv('MYSQLHOST')     ?: 'localhost';
+        $this->db_user = getenv('MYSQLUSER')     ?: 'root';
+        $this->db_pass = getenv('MYSQLPASSWORD') ?: '';
+        $this->db_name = getenv('MYSQLDATABASE') ?: 'loan_management';
+        $this->db_port = (int)(getenv('MYSQLPORT') ?: 3306);
         $this->connect();
     }
     
@@ -72,9 +77,6 @@ class Database {
     
     /**
      * Prepare a SQL statement
-     * 
-     * @param string $sql SQL query string
-     * @return \PDOStatement|false Prepared statement or false on failure
      */
     public function prepare($sql) {
         try {
@@ -173,5 +175,4 @@ class Database {
         return $this->execute($stmt, $params);
     }
 }
-
 ?>
