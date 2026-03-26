@@ -22,12 +22,12 @@ if (!isset($_SESSION)) {
 
 // Auto-detect app base URL
 if (!defined('APP_BASE')) {
-    $dir = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
-    // Strip if running in subfolder
+    $dir = rtrim(str_replace('\\\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
     $dir = preg_replace('#/(staff|setup)$#', '', $dir);
-    if ($dir === '') $dir = '/';
+    // Leave $dir as '' when at root — do NOT set to '/'
     define('APP_BASE', $dir);
 }
+
 
 function app_base() { 
     return APP_BASE; 
