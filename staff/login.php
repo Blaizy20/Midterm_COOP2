@@ -12,8 +12,6 @@ $tenants = fetch_all(q(
 $settings = get_system_settings($selected_tenant_id);
 $error = '';
 
-$BASE = rtrim(APP_BASE, '/');
-
 if (isset($_GET['error']) && $_GET['error'] === 'invalid_tenant') {
   $error = 'Your tenant access is invalid or inactive. Please log in again.';
 }
@@ -65,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
         set_current_active_tenant_id($owned_tenants[0]['tenant_id']);
       } else {
         clear_current_active_tenant_id();
-        header("Location: " . $BASE . "/staff/select_tenant.php");
+        header("Location: " . APP_BASE . "/staff/select_tenant.php");
         exit;
       }
     }
@@ -85,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
         unset($_SESSION['pending_login_audit']);
       }
 
-      $return_url = $_SESSION['return_url'] ?? ($BASE . "/staff/dashboard.php");
+      $return_url = $_SESSION['return_url'] ?? (APP_BASE . "/staff/dashboard.php");
       unset($_SESSION['return_url']);
       header("Location: " . $return_url);
       exit;
@@ -99,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Staff Login</title>
-  <link rel="stylesheet" href="<?php echo $BASE; ?>/assets/css/theme.css">
+  <link rel="stylesheet" href="<?php echo APP_BASE; ?>/assets/css/theme.css">
   <style>
     :root{
       --login-primary: <?= json_encode($settings['primary_color'] ?? app_default_primary_color()) ?>;
@@ -456,7 +454,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
     <header class="login-header">
       <div class="login-brand">
         <div class="login-brand-mark">
-          <img src="<?php echo htmlspecialchars($settings['logo_path'] ?? $BASE . '/assets/img/CredenceLend.png'); ?>" alt="Logo"/>
+          <img src="<?php echo htmlspecialchars($settings['logo_path'] ?? APP_BASE . '/assets/img/logo.png'); ?>" alt="Logo"/>
         </div>
         <div class="login-brand-text">
           <strong><?= htmlspecialchars($settings['system_name'] ?? 'CredenceLend') ?></strong>
@@ -550,7 +548,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
           <button class="btn btn-primary login-submit" type="submit">Login</button>
 
           <div class="login-card-footer">
-            <a class="login-link" href="<?php echo $BASE; ?>/staff/forgot_password.php<?= $selected_tenant_id ? '?tenant_id=' . intval($selected_tenant_id) : '' ?>">Forgot password?</a>
+            <a class="login-link" href="<?php echo APP_BASE; ?>/staff/forgot_password.php<?= $selected_tenant_id ? '?tenant_id=' . intval($selected_tenant_id) : '' ?>">Forgot password?</a>
             <div class="login-note">Admin / Manager / Credit Investigator / Loan Officer / Cashier</div>
           </div>
         </form>
