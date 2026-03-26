@@ -6,7 +6,11 @@ $DB_PASS = getenv('MYSQLPASSWORD') ?: '';
 $DB_NAME = getenv('MYSQLDATABASE') ?: 'loan_management';
 $DB_PORT = (int)(getenv('MYSQLPORT') ?: 3306);
 
-mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+// Enable MySQLi error reporting only when the function/constants are available
+// (older PHP builds or minimal extensions may not expose MYSQLI_REPORT_* constants)
+if (function_exists('mysqli_report') && defined('MYSQLI_REPORT_ERROR') && defined('MYSQLI_REPORT_STRICT')) {
+    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+}
 
 /**
  * Return a singleton mysqli connection (with DB selected).
@@ -16,7 +20,12 @@ function db() {
   static $conn = null;
 
   if ($conn === null) {
-    $conn = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME, $DB_PORT);
+    $conn = @new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME, $DB_PORT);
+    if ($conn->connect_errno) {
+      error_log("MySQLi connection failed: " . $conn->connect_error);
+      http_response_code(503);
+      die("Database connection error. Please try again later.");
+    }
     $conn->set_charset('utf8mb4');
   }
   return $conn;
