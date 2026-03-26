@@ -579,7 +579,7 @@ function default_system_settings() {
     return [
         'system_name' => 'CredenceLend',
         'primary_color' => app_default_primary_color(),
-        'logo_path' => APP_BASE . '/assets/img/logo.png'
+        'logo_path' => APP_BASE . '/assets/img/CredenceLend.png'
     ];
 }
 
