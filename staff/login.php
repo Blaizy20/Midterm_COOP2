@@ -456,7 +456,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
     <header class="login-header">
       <div class="login-brand">
         <div class="login-brand-mark">
-          <img src="<?php echo htmlspecialchars($settings['logo_path'] ?? $BASE . '/assets/img/logo.png'); ?>" alt="Logo"/>
+          <img src="<?php echo htmlspecialchars($settings['logo_path'] ?? $BASE . '/assets/img/CredenceLend.png'); ?>" alt="Logo"/>
         </div>
         <div class="login-brand-text">
           <strong><?= htmlspecialchars($settings['system_name'] ?? 'CredenceLend') ?></strong>
