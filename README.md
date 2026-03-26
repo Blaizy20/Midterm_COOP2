@@ -46,11 +46,20 @@ Base URL: `http://localhost/api/v1/`
 
 ## Connection Details
 
-**Database**: `loan_management`  
-**Host**: `localhost`  
-**User**: `root`  
-**Password**: (empty)  
-**Charset**: utf8mb4
+Both connection files read credentials from environment variables at runtime,
+falling back to local XAMPP defaults when the variables are not set.
+
+| Environment Variable | Railway (auto-injected) | Local fallback |
+|----------------------|------------------------|----------------|
+| `MYSQLHOST`          | Railway internal host  | `localhost`    |
+| `MYSQLPORT`          | Railway MySQL port     | `3306`         |
+| `MYSQLUSER`          | Railway MySQL user     | `root`         |
+| `MYSQLPASSWORD`      | Railway MySQL password | *(empty)*      |
+| `MYSQLDATABASE`      | Railway database name  | `loan_management` |
+
+On Railway, these variables are injected automatically when the MySQL service
+is linked to this application. For local development, copy `.env.example` to
+`.env` and fill in your local values (or leave the defaults for XAMPP).
 
 ### Web Portal Connection
 File: [`includes/db.php`](includes/db.php) (MySQLi)
@@ -58,7 +67,7 @@ File: [`includes/db.php`](includes/db.php) (MySQLi)
 ### Mobile API Connection
 File: [`includes/pdo_db.php`](includes/pdo_db.php) (PDO)
 
-Both use same database, different connection methods.
+Both use the same database, different connection methods.
 
 ---
 
@@ -129,9 +138,9 @@ Both use same database, different connection methods.
 ## Configuration
 
 ### Database Credentials
-Update if different:
-- [`includes/db.php`](includes/db.php) lines 2-7
-- [`includes/pdo_db.php`](includes/pdo_db.php) lines 17-22
+Credentials are read from environment variables (`MYSQLHOST`, `MYSQLPORT`,
+`MYSQLUSER`, `MYSQLPASSWORD`, `MYSQLDATABASE`). On Railway these are injected
+automatically. For local development, see `.env.example`.
 
 ### API Settings
 - CORS origins: [`api/v1/config.php`](api/v1/config.php)
